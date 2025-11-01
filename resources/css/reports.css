@@ -1,0 +1,51 @@
+/* Reports and Analytics Styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Charts Container */
+.chart-container {
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Recommendations */
+.recommendation-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.recommendation-card h4 {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1e293b;
+}
+
+.recommendation-card p {
+    color: #64748b;
+    font-size: 0.875rem;
+}
