@@ -48,3 +48,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 */
 Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
+
+// Public user-facing dashboard (no auth required) — static UI for queue & history
+Route::get('/user', function () {
+	return view('user.dashboard');
+})->name('user.dashboard');
