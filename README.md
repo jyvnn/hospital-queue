@@ -62,10 +62,24 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Hospital Queue — Project README
 
-This repository contains the Hospital Queue application (Laravel + Vite). The sections below explain how to get it running locally and how to prepare the repository for GitHub/CI-based deploys.
+Hospital Queue is a small Laravel + Vite application used to manage patient check-ins, doctors, and appointments. This project now includes a lightweight chatbot (DocChat) that can answer simple queries about doctors and the current queue.
 
-### Getting started (development)
+This README focuses on how to run the app locally, where to find chatbot functionality, and a few developer notes about recent changes.
 
+Contents
+- Features
+- Quick start (development)
+- Chatbot (DocChat)
+- Tests
+- Deploy / CI guidance
+- Contributing & notes
+
+Features
+- Patient queue and dashboard (check-in, in-progress, completed)
+- Doctor and appointment management
+- Simple chatbot (DocChat) accessible from the site — supports basic commands (see below)
+
+Quick start (development)
 1. Copy the example env and install PHP dependencies:
 
 ```powershell
@@ -97,38 +111,64 @@ php artisan serve --host=127.0.0.1 --port=8000
 # open http://127.0.0.1:8000
 ```
 
-### Tests
+Chatbot (DocChat)
+-----------------
+DocChat is a lightweight chat UI implemented with a blade view and a small controller handler. It is not a full BotMan conversation stack yet, but it's functional and designed to be extended.
 
+Where to find it
+- Chat UI: `resources/views/botman/chat.blade.php`
+- Controller: `app/Http/Controllers/BotManController.php`
+- Routes: registered in `routes/web.php` as `/chat` (UI) and `/botman` (AJAX endpoint)
+
+How to use
+- Open the chat UI at `/chat` (or click the floating chat button on the site when authenticated).
+- Supported commands (short list):
+	- `hi` — Greet the bot
+	- `help` — Show the concise list of supported commands
+	- `list doctors` / `doctors` — Show available doctors (name, specialty, availability)
+	- `queue` / `waiting` — Show queue summary and a short list of next patients
+
+Implementation notes
+- The chat UI sends AJAX POST requests to `/botman` with JSON { message } and expects JSON replies { reply }.
+- The controller currently implements a small set of canned/intention-based replies and queries the database for doctors, appointments, and patients. It uses `App\\Models\\Doctor`, `Appointment`, and `Patient`.
+- `Appointment` now contains `doctor()` and `patient()` Eloquent relations so responses may include related names without extra queries (eager-loading is used where appropriate).
+- The floating chat button is shown only to authenticated users (wrapped with Blade `@auth`). If you want the chat public, edit `resources/views/layouts/app.blade.php`.
+
+Tests
+-----
 Run the PHPUnit suite:
 
 ```powershell
 php artisan test
 ```
 
-### GitHub / Repository guidance
+If you add controller behaviour or message parsing, consider adding Feature tests for `BotManController` to exercise the different message paths.
 
+Deploy / CI guidance
+--------------------
 - Commit application code only (do NOT commit `vendor/` or `node_modules/`).
 - Commit `composer.lock` and `package-lock.json` for reproducible installs.
-- Add a `.env.example` (do not commit `.env` with secrets).
-- Prefer building assets in CI rather than committing `public/build/`. If your deploy target cannot build assets, commit `public/build/` intentionally and document it in the README.
+- Add a `.env.example` and do not commit `.env` with secrets.
+- Prefer building assets in CI and deploying built assets to production. If your deploy target cannot build assets, commit `public/build/` intentionally and document it.
 
-### CI (recommended)
+Recommended CI steps
+- checkout
+- composer install --no-interaction --prefer-dist --optimize-autoloader
+- npm ci && npm run build
+- php artisan migrate --force
+- php artisan test
 
-Add a CI job that:
-- checks out the code
-- installs PHP dependencies (Composer)
-- installs Node dependencies and builds assets
-- runs PHPUnit
+Developer notes / suggestions
+----------------------------
+- Consider adding inverse relations (`appointments()`) to `Doctor` and `Patient` if you need to traverse from doctors/patients to their appointments.
+- Add `$casts = ['scheduled_at' => 'datetime']` to `Appointment` for automatic Carbon casting.
+- Keep the chat command list DRY by extracting the commands into a config array if you expect to reuse them in multiple places.
 
-I can add a GitHub Actions `ci.yml` if you want.
+Contributing
+------------
+If you'd like me to add a GitHub Actions workflow, a `.gitignore`, or a `.env.example`, tell me which and I will create them.
 
-### Quick checklist before pushing to GitHub
+License
+-------
+This project follows the licensing of its dependencies. The Laravel framework is MIT-licensed.
 
-- [ ] Add `.gitignore` (ignore `vendor/` and `node_modules/`).
-- [ ] Add `.env.example` with placeholders.
-- [ ] Confirm `composer.lock` and `package-lock.json` are committed.
-- [ ] Add a CI workflow (`.github/workflows/ci.yml`) to build assets and run tests.
-
----
-
-If you want, I can create the `.gitignore` and `.env.example` files now and/or add a GitHub Actions workflow. Which would you like me to add next?
