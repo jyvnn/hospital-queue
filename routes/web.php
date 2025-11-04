@@ -7,6 +7,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\BotManController;
 
 /*
 | Pages (each tab = its own blade)
@@ -39,3 +40,11 @@ Route::post('/patients/complete', [PatientController::class, 'completeConsultati
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*
+| Botman / Chat
+| - GET `/chat` serves a simple chat UI
+| - POST `/botman` receives messages from the UI and returns JSON replies
+*/
+Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
