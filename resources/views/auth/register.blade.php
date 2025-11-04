@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+{{--
+        REGISTER PAGE - SECTION LABELS & PURPOSE
+        ---------------------------------------
+        - This view extends `layouts.app` and injects the registration form into the main content area.
+        - Sections to edit when troubleshooting:
+            * CSRF token: the `@csrf` directive inside the form (required for POST requests)
+            * Input fields: `#name`, `#email`, `#password`, `#password-confirm` (ensure names match controller)
+            * Validation error display: the `@error('field')` blocks show server-side errors
+            * Submit button: triggers `POST {{ route('register') }}` which is handled by Auth controller
+        - If you need to hide header tabs or change header text, edit `resources/views/layouts/app.blade.php`.
+--}}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">

@@ -26,14 +26,16 @@ class BotManController extends Controller
     {
         $message = trim((string) $request->input('message', ''));
 
+        // If the user did not send a message
         if ($message === '') {
-            return response()->json(['reply' => "I didn't receive a message. Try typing 'hi' or 'help'."], 400);
+            return response()->json(['reply' => "Input Unrecognized. Please Try Again"], 400);
         }
 
         $lower = strtolower($message);
 
+        //
         if (strpos($lower, 'hi') !== false || strpos($lower, 'hello') !== false) {
-            $reply = 'Hello — I am the hospital chatbot. How can I help you today?';
+            $reply = 'Hello — I am DocChat. How can I help you today?';
         } elseif (strpos($lower, 'help') !== false) {
             $reply = "You can ask me things like:\n - 'list doctors'\n - 'my appointments'\n - 'how to register'";
         } elseif (strpos($lower, 'list doctors') !== false || strpos($lower, 'doctors') !== false) {

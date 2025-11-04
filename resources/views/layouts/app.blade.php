@@ -154,7 +154,19 @@
 </head>
 <body>
 
-    <!-- Navigation (responsive, based on professor template) -->
+        <!-- Navigation (responsive, based on professor template) -->
+        {{--
+                LAYOUT SECTIONS / PURPOSE
+                -------------------------
+                - Navigation: top-left brand and authentication links (Login/Register or user menu).
+                - Header: centered site title and lead description.
+                - Site tabs: quick links to application pages (Queue Management, Patient Registration, Doctors, History, Reports).
+                    These tabs link to routes that may require authentication; by default we show them only to
+                    authenticated users to avoid exposing management controls to guests. To change behavior,
+                    edit the @auth / @endauth block around the .site-tabs element below.
+                - Main content: `@yield('content')` — page-specific content lives here (cards, forms, lists).
+                - Footer: small copyright / metadata area.
+        --}}
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-3">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">Hospital Queue</a>
@@ -196,6 +208,9 @@
             <h1 class="display-4">Hospital Queue Management System</h1>
             <p class="lead text-muted">Efficient patient flow management for healthcare facilities</p>
 
+            {{-- Site tabs: visible to authenticated users only. These links navigate to app sections.
+                 If you want tabs visible to guests, remove the @auth / @endauth wrapper. --}}
+            @auth
             <div class="d-flex justify-content-center site-tabs">
                 <div class="btn-group" role="group" aria-label="Tabs">
                     <a href="{{ route('home') }}" class="btn {{ request()->routeIs('home') ? 'btn-primary' : 'btn-outline-secondary' }}">Queue Management</a>
@@ -205,6 +220,7 @@
                     <a href="{{ route('reports') }}" class="btn {{ request()->routeIs('reports') ? 'btn-primary' : 'btn-outline-secondary' }}">Reports & Analytics</a>
                 </div>
             </div>
+            @endauth
         </div>
     </header>
 
