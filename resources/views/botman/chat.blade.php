@@ -92,6 +92,13 @@
             .message.user .bubble { font-size: 0.95rem; padding: 8px 10px; max-width: 92%; }
             .input input { font-size: 1rem; }
         }
+    /* Avatar (icon) styles - bot icon shown next to bot bubbles;*/
+    .message { display: flex; align-items: flex-end; gap: 12px; }
+    .message.bot { justify-content: flex-start; }
+    .message.user { justify-content: flex-end; }
+    .message .avatar { width:44px; height:44px; flex:0 0 44px; border-radius:50%; overflow:hidden; background:#e6eef7; display:inline-block; }
+    .message .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+
     </style>
 </head>
 <body>
@@ -111,17 +118,46 @@ const messagesEl = document.getElementById('messages');
 const input = document.getElementById('messageInput');
 const btn = document.getElementById('sendBtn');
 
+// Avatar image URL for bot (place image in public/images/bot.svg if desired).
+// NOTE: user avatar/icons have been disabled — user messages will show bubble only.
+const BOT_AVATAR_URL = "{{ asset('images/chatboticon.png') }}";
+
 function appendMessage(text, who){
-    // create container and bubble, then append
+    // wrapper holds avatar + bubble
     const wrapper = document.createElement('div');
-    // start with hidden state; we'll flip to visible to trigger CSS transition
     wrapper.className = 'message ' + (who === 'user' ? 'user' : 'bot') + ' hidden';
+
+    // bubble element
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     bubble.textContent = text;
-    wrapper.appendChild(bubble);
+
+    // For bot messages include an avatar on the left; for user messages we show bubble only (no icon)
+    if (who === 'bot') {
+        const avatarWrap = document.createElement('div');
+        avatarWrap.className = 'avatar';
+        const img = document.createElement('img');
+        img.alt = 'Bot';
+        img.src = BOT_AVATAR_URL;
+        // fallback: if image fails to load, replace with an initials SVG
+        img.onerror = function(){
+            const initials = 'B';
+            const bg = '#eef2ff';
+            const fg = '#0f172a';
+            const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44'><rect width='100%' height='100%' fill='${bg}' rx='8' ry='8'/><text x='50%' y='54%' font-size='20' text-anchor='middle' fill='${fg}' font-family='Arial' font-weight='600'>${initials}</text></svg>`;
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        };
+        avatarWrap.appendChild(img);
+        wrapper.appendChild(avatarWrap);
+        wrapper.appendChild(bubble);
+    } else {
+        // user: bubble only, aligned to the right by CSS
+        wrapper.appendChild(bubble);
+    }
+
     messagesEl.appendChild(wrapper);
     messagesEl.scrollTop = messagesEl.scrollHeight;
+
     // Trigger animation on next frame to ensure transition runs
     requestAnimationFrame(() => {
         wrapper.classList.remove('hidden');
@@ -137,19 +173,31 @@ async function sendMessage(){
     try{
         const res = await fetch('{{ url('/botman') }}', {
             method: 'POST',
+            credentials: 'same-origin', // ensure session cookie is sent (prevents CSRF/session mismatch)
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({ message: text })
         });
-        const data = await res.json();
-        if(res.ok && data.reply){
-            appendMessage(data.reply, 'bot');
-        } else if(data.reply){
-            appendMessage(data.reply, 'bot');
+
+        // Robustly handle JSON or HTML error pages (e.g. CSRF failure returns an HTML error view)
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            const data = await res.json();
+            if (res.ok && data.reply) {
+                appendMessage(data.reply, 'bot');
+            } else if (data.reply) {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage('No reply from server', 'bot');
+            }
         } else {
-            appendMessage('No reply from server', 'bot');
+            // non-JSON (likely an HTML error page). Show a concise error message to the user.
+            const text = await res.text();
+            // Common causes: 419 session expired (CSRF), 500 server error. Show first 300 chars.
+            const snippet = text.replace(/\s+/g, ' ').trim().slice(0, 300);
+            appendMessage('Error: ' + snippet + (text.length > 300 ? '…' : ''), 'bot');
         }
     } catch (err) {
         appendMessage('Error: ' + err.message, 'bot');

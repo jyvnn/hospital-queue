@@ -59,6 +59,40 @@
         .site-header .display-4 { font-size: 2.25rem; margin-bottom: 6px; font-weight:700; }
         .site-header .lead { color: #6b7280; margin-bottom: 12px; }
 
+          /* Floating Chat FAB (bottom-right)
+              - Purpose: quick access to the chatbot page from any page
+              - Styling: floating white rounded card with shadow; uses public/images/bot.svg
+          */
+          .chat-fab {
+                position: fixed;
+                right: 20px;
+                bottom: 28px;
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+                background: #fff;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                box-shadow: 0 8px 30px rgba(2,6,23,.12);
+                text-decoration:none;
+                z-index: 9999;
+          }
+        .chat-fab img { width:34px; height:34px; display:block; transition: filter 160ms ease; }
+        .chat-fab {
+            transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+        }
+        .chat-fab:hover {
+            transform: translateY(-3px);
+            /* change background to requested color on hover */
+            background: #4ea8de;
+            box-shadow: 0 12px 34px rgba(78,168,222,0.18);
+        }
+        /* make the icon stand out on the colored background (invert if needed) */
+        .chat-fab:hover img { filter: brightness(0) invert(1); }
+        .chat-fab:focus-visible { outline: 3px solid rgba(78,168,222,0.28); outline-offset: 3px; }
+          @media (max-width:768px) { .chat-fab { right:14px; bottom:18px; width:56px; height:56px; } .chat-fab img { width:28px; height:28px; } }
+
         /* tabs (minimal) */
         .site-tabs .btn { padding: 8px 14px; border-radius: 8px; border: 1px solid #e6eef0; background: #ffffff; color:#374151; font-weight:500; text-decoration:none; }
         .site-tabs .btn + .btn { margin-left: 8px; }
@@ -241,6 +275,12 @@
 
     <!-- Page-specific scripts -->
     @stack('scripts')
+    {{-- Floating chat FAB: visible to authenticated users only (links to the chat UI) --}}
+    @auth
+    <a href="{{ route('botman.chat') }}" class="chat-fab" title="Open Chatbot" aria-label="Open Chatbot">
+        <img src="{{ asset('images/chatboticon.png') }}" alt="Chatbot">
+    </a>
+    @endauth
     {{-- Animations are provided via CSS classes. JS stagger removed; add `animate-in` class server-side where desired. --}}
 </body>
 </html>
