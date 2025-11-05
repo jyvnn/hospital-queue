@@ -10,6 +10,11 @@ use Carbon\Carbon;
 
 class BotManController extends Controller
 {
+    public function __construct()
+    {
+        // ensure only authenticated users can hit the controller methods
+        $this->middleware('auth');
+    }
     /**
      * Show a minimal chat UI that posts to /botman
      */

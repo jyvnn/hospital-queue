@@ -46,8 +46,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 | - GET `/chat` serves a simple chat UI
 | - POST `/botman` receives messages from the UI and returns JSON replies
 */
-Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
-Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
+// Chatbot routes — require authentication. Protect both the UI and the AJAX endpoint.
+Route::middleware('auth')->group(function () {
+	Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
+	Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
+});
 
 // Public user-facing dashboard (no auth required) — static UI for queue & history
 Route::get('/user', function () {
