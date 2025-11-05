@@ -11,9 +11,19 @@
 use Illuminate\Support\Facades\Route;
 
 // Public user-facing dashboard (no auth required) — static UI for queue & history
+// Authentication routes for public users (patient portal)
+Route::get('/user/login', [App\Http\Controllers\UserAuthController::class, 'showLogin'])->name('user.login');
+Route::post('/user/login', [App\Http\Controllers\UserAuthController::class, 'login']);
+
+Route::get('/user/register', [App\Http\Controllers\UserAuthController::class, 'showRegister'])->name('user.register');
+Route::post('/user/register', [App\Http\Controllers\UserAuthController::class, 'register']);
+
+Route::post('/user/logout', [App\Http\Controllers\UserAuthController::class, 'logout'])->name('user.logout');
+
+// Protected user dashboard — requires authentication (patients)
 Route::get('/user', function () {
 	return view('user.dashboard');
-})->name('user.dashboard');
+})->middleware('auth')->name('user.dashboard');
 
 // Helpful informational endpoint for developers
 Route::get('/routes-info', function () {

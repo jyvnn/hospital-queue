@@ -18,22 +18,22 @@ class PageController extends Controller
 
     public function registration()
     {
-        return view('pages.registration', $this->gatherDashboardData());
+        return view('admin.pages.registration', $this->gatherDashboardData());
     }
 
     public function doctors()
     {
-        return view('pages.doctors', $this->gatherDashboardData());
+        return view('admin.pages.doctors', $this->gatherDashboardData());
     }
 
     public function history()
     {
-        return view('pages.history', $this->gatherDashboardData());
+        return view('admin.pages.history', $this->gatherDashboardData());
     }
 
     public function reports()
     {
-        return view('pages.reports', $this->gatherDashboardData());
+        return view('admin.pages.reports', $this->gatherDashboardData());
     }
 
     /**

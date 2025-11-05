@@ -65,7 +65,7 @@ class HomeController extends Controller
             ->get()
             ->map(function($p) { return array_merge($p->toArray(), ['name' => $p->full_name]); });
 
-        return view('pages.queue', [
+        return view('admin.pages.queue', [
             'doctors' => $doctors,
             'appointments' => $appointments,
             'stats' => [

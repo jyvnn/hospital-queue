@@ -55,3 +55,8 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->n
 Route::get('/user', function () {
     return view('user.dashboard');
 })->name('user.dashboard');
+
+// Include public user routes (login/register/dashboard) so the web entrypoint
+// exposes the patient-facing pages. This keeps admin.php as the primary
+// web route file while still loading the public user routes.
+require __DIR__ . '/user.php';
