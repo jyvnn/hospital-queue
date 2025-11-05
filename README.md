@@ -116,9 +116,9 @@ Chatbot (DocChat)
 DocChat is a lightweight chat UI implemented with a blade view and a small controller handler. It is not a full BotMan conversation stack yet, but it's functional and designed to be extended.
 
 Where to find it
-- Chat UI: `resources/views/botman/chat.blade.php`
-- Controller: `app/Http/Controllers/BotManController.php`
-- Routes: registered in `routes/web.php` as `/chat` (UI) and `/botman` (AJAX endpoint)
+-- Chat UI: `resources/views/botman/chat.blade.php`
+-- Controller: `app/Http/Controllers/BotManController.php`
+-- Routes: registered in `routes/admin.php` as `/chat` (UI) and `/botman` (AJAX endpoint)
 
 How to use
 - Open the chat UI at `/chat` (or click the floating chat button on the site when authenticated).
