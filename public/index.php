@@ -17,4 +17,11 @@ require __DIR__.'/../vendor/autoload.php';
 /** @var Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
+// Prevent PHP from advertising itself via the X-Powered-By header. Also
+// attempt to disable expose_php at runtime as a best-effort measure.
+@ini_set('expose_php', '0');
+if (function_exists('header_remove')) {
+    @header_remove('X-Powered-By');
+}
+
 $app->handleRequest(Request::capture());

@@ -36,6 +36,14 @@ class Kernel extends HttpKernel
             // other web middleware
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            // Content Security Policy (report-only by default)
+            \App\Http\Middleware\ContentSecurityPolicy::class,
+            // Security response headers (X-Frame-Options, HSTS, etc.)
+            \App\Http\Middleware\SecurityHeaders::class,
+            // Strip any bodies from redirect responses to avoid leaking info
+            \App\Http\Middleware\StripRedirectBody::class,
+            // Ensure cookies are HttpOnly
+            \App\Http\Middleware\EnsureHttpOnlyCookies::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -62,6 +70,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         // custom admin middleware
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
-    'not_admin' => \App\Http\Middleware\EnsureUserIsNotAdmin::class,
+        'not_admin' => \App\Http\Middleware\EnsureUserIsNotAdmin::class,
     ];
 }

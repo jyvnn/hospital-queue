@@ -160,7 +160,9 @@
 
                 // Long-polling version listener for near-instant updates when admin changes queue
                 // If Echo is available and broadcasting is configured, we also listen to 'patients' channel
-                window.fetchQueueAjax = fetchQueueAjax; // expose for Echo listener in resources/js/app.js
+                // Attach to a single application namespace instead of creating a loose global
+                window.App = window.App || {};
+                window.App.fetchQueueAjax = fetchQueueAjax;
 
                 let lastVersion = 0;
                 function listenVersion(){

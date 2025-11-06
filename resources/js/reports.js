@@ -107,8 +107,9 @@ const Reports = (function () {
     return { init, refresh };
 })();
 
-// Auto init and expose
 window.addEventListener('DOMContentLoaded', () => {
     try { Reports.init(); } catch (e) { console.error('Reports init failed', e); }
-    window.Reports = Reports;
+    // attach to application namespace instead of polluting global scope
+    window.App = window.App || {};
+    window.App.Reports = Reports;
 });
