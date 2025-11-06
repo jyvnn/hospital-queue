@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="patientContact">Contact Number</label>
-                        <input type="tel" id="patientContact" name="contact" class="form-input" placeholder="Contact number" required value="{{ old('contact') }}">
+                        <input type="tel" id="patientContact" name="contact" class="form-input" placeholder="Contact number" required value="{{ old('contact') }}" maxlength="11" pattern="[0-9]{11}" inputmode="numeric" autocomplete="tel" title="Enter exactly 11 digits" oninput="this.value = this.value.replace(/\D/g, '').slice(0,11);">
                         @error('contact')<div class="text-danger small">{{ $message }}</div>@enderror
                     </div>
                 </div>
