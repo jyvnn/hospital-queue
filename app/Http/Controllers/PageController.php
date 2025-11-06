@@ -66,13 +66,17 @@ class PageController extends Controller
         })->avg();
 
         // current queue lists so server can render without requiring client JS
+        // Order waiting/in-progress by priority (Urgent > High > Regular) then check-in time
+        $orderPriority = "CASE WHEN priority='Urgent' THEN 3 WHEN priority='High' THEN 2 WHEN priority='Regular' THEN 1 ELSE 0 END DESC";
         $waitingPatients = Patient::where('status', 'Waiting')
-            ->orderBy('check_in_time', 'asc')
+            ->orderByRaw($orderPriority)
+            ->orderBy('check_in_time','asc')
             ->get()
             ->map(function($p) { return array_merge($p->toArray(), ['name' => $p->full_name]); });
 
         $inProgressPatients = Patient::where('status', 'In Progress')
-            ->orderBy('check_in_time', 'asc')
+            ->orderByRaw($orderPriority)
+            ->orderBy('check_in_time','asc')
             ->get()
             ->map(function($p) { return array_merge($p->toArray(), ['name' => $p->full_name]); });
 

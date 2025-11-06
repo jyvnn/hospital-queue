@@ -115,3 +115,57 @@
         </div>
     </div>
 </div>
+
+@if(auth()->check() && !auth()->user()->is_admin)
+<script>
+    (function(){
+        // For non-admin users, override the history table with only their records
+        var tableBody = document.getElementById('historyTableBody');
+        var totalEl = document.getElementById('totalHistoryPatients');
+        var completedEl = document.getElementById('completedHistoryPatients');
+        var todayEl = document.getElementById('todayHistoryPatients');
+        var loading = document.getElementById('historyLoading');
+
+        function formatRow(p){
+            var symptoms = (p.symptoms || '').substring(0,80);
+            var checkin = p.check_in_time ? new Date(p.check_in_time).toLocaleString() : '';
+            return '<tr>'+
+                '<td>'+ (p.id || '') +'</td>'+
+                '<td>'+ (p.name || '') +'</td>'+
+                '<td>'+ (p.age || '') +'</td>'+
+                '<td>'+ (p.contact || '') +'</td>'+
+                '<td>'+ (escapeHtml(symptoms) || '') +'</td>'+
+                '<td>'+ (p.status || '') +'</td>'+
+                '<td>'+ (checkin) +'</td>'+
+                '<td>'+ (p.priority || 'Regular') +'</td>'+
+                '</tr>';
+        }
+
+        function escapeHtml(s){ if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        function fetchMyHistory(){
+            if (!tableBody) return;
+            if (loading) loading.classList.remove('hidden');
+            fetch('/patient/history?email={{ urlencode(auth()->user()->email) }}', { headers: { 'Accept':'application/json', 'X-Requested-With':'XMLHttpRequest' }})
+                .then(function(r){ return r.json(); })
+                .then(function(js){
+                    if (!js || !js.success) return;
+                    var rows = (js.data || []).map(function(p){ return formatRow(p); }).join('');
+                    tableBody.innerHTML = rows || '<tr><td colspan="8">No patient history available.</td></tr>';
+                    if (totalEl) totalEl.textContent = js.stats ? js.stats.total : (js.data||[]).length;
+                    if (completedEl) completedEl.textContent = js.stats ? js.stats.completed : 0;
+                    if (todayEl) todayEl.textContent = js.stats ? js.stats.total : (js.data||[]).length;
+                })
+                .catch(function(){ /* noop */ })
+                .finally(function(){ if (loading) loading.classList.add('hidden'); });
+        }
+
+        // hide filter form for patients (optional)
+        var form = document.getElementById('historyFiltersForm');
+        if (form) form.style.display = 'none';
+
+        // initial fetch
+        fetchMyHistory();
+    })();
+</script>
+@endif

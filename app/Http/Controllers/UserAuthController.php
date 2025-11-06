@@ -10,12 +10,12 @@ class UserAuthController extends Controller
 {
     public function showLogin()
     {
-        return view('patient.login');
+        return view('auth.login');
     }
 
     public function showRegister()
     {
-        return view('patient.register');
+        return view('auth.register');
     }
 
     public function login(Request $request)
@@ -29,6 +29,11 @@ class UserAuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+            $user = Auth::user();
+            // If admin credentials used, send to admin dashboard
+            if ($user && $user->is_admin) {
+                return redirect()->intended(route('home'));
+            }
             return redirect()->intended(route('user.dashboard'));
         }
 
@@ -60,6 +65,6 @@ class UserAuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('user.login');
+        return redirect()->route('login');
     }
 }

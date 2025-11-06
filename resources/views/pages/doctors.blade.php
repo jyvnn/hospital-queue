@@ -1,2 +1,0 @@
-@includeIf('admin.pages.doctors')
-

@@ -29,6 +29,34 @@
 
     <!-- Charts -->
     <div id="chartsContainer">
+        <!-- Breakdowns: two separate cards side-by-side -->
+        <div style="display:flex; gap:16px; margin-bottom:16px; align-items:stretch;">
+            <div class="card mb-0 shadow-sm" style="flex:1; min-width:0;">
+                <div class="card-header">
+                    <div class="card-title">Patients by Priority</div>
+                    <div class="card-description">Count by priority level</div>
+                </div>
+                <div class="card-body" style="height:300px;">
+                    <div style="height:100%;">
+                        <canvas id="priorityChart" style="width:100%; height:100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-0 shadow-sm" style="flex:1; min-width:0;">
+                <div class="card-header">
+                    <div class="card-title">Patients by Service Type</div>
+                    <div class="card-description">Distribution across service types</div>
+                </div>
+                <div class="card-body" style="height:300px;">
+                    <div style="height:100%;">
+                        <canvas id="serviceTypeChart" style="width:100%; height:100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patients over time (full width, below breakdowns) -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header">
                 <div class="card-title">Patients over time</div>
@@ -54,17 +82,6 @@
                     <canvas id="patientsOverTimeChart" style="width:100%; height:100%;"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Recommendations -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header">
-            <div class="card-title">System Recommendations</div>
-            <div class="card-description">Based on current data and utilization patterns</div>
-        </div>
-        <div class="card-body" id="recommendationsContainer">
-            <!-- Dynamic recommendations will be loaded here -->
         </div>
     </div>
 </div>

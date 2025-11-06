@@ -11,7 +11,7 @@ class Patient extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'first_name','last_name','age','gender','contact','symptoms',
+        'first_name','last_name','age','gender','contact','email','symptoms',
         'priority','service_type','status','check_in_time','completion_time','assigned_doctor_id'
     ];
 
@@ -19,5 +19,13 @@ class Patient extends Model
     public function getFullNameAttribute()
     {
         return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    /**
+     * Assigned doctor relation (optional)
+     */
+    public function assignedDoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'assigned_doctor_id');
     }
 }

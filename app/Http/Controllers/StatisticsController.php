@@ -136,4 +136,48 @@ class StatisticsController extends Controller
 
         return response()->json(['success' => true, 'data' => $payload]);
     }
+
+    /**
+     * Return counts grouped by priority.
+     * Response: { success: true, data: { labels: [...], counts: [...] } }
+     */
+    public function patientsByPriority(): JsonResponse
+    {
+        // expected priority buckets (canonical order)
+        $buckets = ['Urgent', 'Regular'];
+
+        $rows = Patient::selectRaw('priority, COUNT(*) as total')
+            ->groupBy('priority')
+            ->get()
+            ->pluck('total','priority')
+            ->toArray();
+
+        $labels = [];
+        $counts = [];
+        foreach ($buckets as $b) {
+            $labels[] = $b;
+            $counts[] = isset($rows[$b]) ? (int)$rows[$b] : 0;
+        }
+
+        return response()->json(['success' => true, 'data' => ['labels' => $labels, 'counts' => $counts]]);
+    }
+
+    /**
+     * Return counts grouped by service_type.
+     * Response: { success: true, data: { labels: [...], counts: [...] } }
+     */
+    public function patientsByServiceType(): JsonResponse
+    {
+        $rows = Patient::selectRaw("COALESCE(service_type, 'Unknown') as service_type, COUNT(*) as total")
+            ->groupBy('service_type')
+            ->orderByDesc('total')
+            ->get()
+            ->pluck('total','service_type')
+            ->toArray();
+
+        $labels = array_keys($rows);
+        $counts = array_values($rows);
+
+        return response()->json(['success' => true, 'data' => ['labels' => $labels, 'counts' => $counts]]);
+    }
 }

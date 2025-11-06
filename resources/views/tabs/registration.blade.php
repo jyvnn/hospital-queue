@@ -75,6 +75,12 @@
                             @error('serviceType')<div class="text-danger small">{{ $message }}</div>@enderror
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="form-label" for="patientEmail">Patient Email (optional)</label>
+                    <input type="email" id="patientEmail" name="email" class="form-input" placeholder="Patient email (optional)" value="{{ old('email') }}">
+                    <div class="small text-muted">If the patient has an account with this email, their history will be linked and visible to that user.</div>
+                    @error('email')<div class="text-danger small">{{ $message }}</div>@enderror
+                </div>
         </div>
         <div class="card-footer">
                 <button type="submit" class="btn btn-primary" id="addPatientBtn">Add to Queue</button>

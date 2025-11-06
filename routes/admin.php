@@ -14,49 +14,54 @@ use App\Http\Controllers\BotManController;
 | These routes are intended for hospital staff (admins/workers). The file was
 | renamed from `web.php` to `admin.php` to make its purpose explicit.
 */
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/registration', [PageController::class, 'registration'])->name('registration');
-Route::get('/doctors', [PageController::class, 'doctors'])->name('doctors');
-Route::get('/history', [PageController::class, 'history'])->name('history');
-Route::get('/reports', [PageController::class, 'reports'])->name('reports');
 
-/*
-| GET endpoints
-*/
-Route::get('/patients/list', [PatientController::class, 'index']);
-Route::get('/patient/history', [PatientController::class, 'history']);
-Route::get('/doctors/list', [DoctorController::class, 'index']);
-Route::get('/appointments/list', [AppointmentController::class, 'index']);
-Route::get('/appointments', [AppointmentController::class, 'page'])->name('appointments');
-Route::get('/statistics', [StatisticsController::class, 'index']);
-Route::get('/monthly-reports', [StatisticsController::class, 'monthlyReports']);
-Route::get('/recommendations', [StatisticsController::class, 'recommendations']);
-Route::get('/reports/patients-per-day', [StatisticsController::class, 'patientsPerDay']);
-
-/*
-| POST endpoints (CSRF protected — JS must send X-CSRF-TOKEN header)
-*/
-Route::post('/patients/add', [PatientController::class, 'store']);
-Route::post('/patients/assign-doctor', [PatientController::class, 'assignDoctor']);
-Route::post('/patients/complete', [PatientController::class, 'completeConsultation']);
+// Auth routes
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Put all authenticated routes inside a single auth group, then nest admin vs patient
+Route::middleware(['auth'])->group(function () {
 
-/*
-| Botman / Chat
-| - GET `/chat` serves a simple chat UI
-| - POST `/botman` receives messages from the UI and returns JSON replies
-*/
-Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
-Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
+    // Admin-only pages and APIs
+    Route::middleware([App\Http\Middleware\EnsureUserIsAdmin::class])->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('home');
+        Route::get('/registration', [PageController::class, 'registration'])->name('registration');
+        Route::get('/doctors', [PageController::class, 'doctors'])->name('doctors');
+        Route::get('/history', [PageController::class, 'history'])->name('history');
+        Route::get('/reports', [PageController::class, 'reports'])->name('reports');
 
-// Public user-facing dashboard (no auth required) — static UI for queue & history
-Route::get('/user', function () {
-    return view('user.dashboard');
-})->name('user.dashboard');
+        // GET endpoints
+        Route::get('/doctors/list', [DoctorController::class, 'index']);
+        Route::get('/appointments/list', [AppointmentController::class, 'index']);
+        Route::get('/appointments', [AppointmentController::class, 'page'])->name('appointments');
+        Route::get('/statistics', [StatisticsController::class, 'index']);
+        Route::get('/monthly-reports', [StatisticsController::class, 'monthlyReports']);
+        Route::get('/recommendations', [StatisticsController::class, 'recommendations']);
+        Route::get('/reports/patients-per-day', [StatisticsController::class, 'patientsPerDay']);
+        Route::get('/reports/by-priority', [StatisticsController::class, 'patientsByPriority']);
+        Route::get('/reports/by-service-type', [StatisticsController::class, 'patientsByServiceType']);
 
-// Include public user routes (login/register/dashboard) so the web entrypoint
-// exposes the patient-facing pages. This keeps admin.php as the primary
-// web route file while still loading the public user routes.
-require __DIR__ . '/user.php';
+        // POST endpoints
+        Route::post('/patients/add', [PatientController::class, 'store']);
+        Route::post('/patients/assign-doctor', [PatientController::class, 'assignDoctor']);
+        Route::post('/patients/complete', [PatientController::class, 'completeConsultation']);
+
+        // Botman / Chat
+        Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
+        Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
+    });
+
+    // Patient-facing pages (authenticated but not admin)
+    Route::middleware([App\Http\Middleware\EnsureUserIsNotAdmin::class])->group(function () {
+        Route::get('/user', function () {
+            return view('user.dashboard');
+        })->name('user.dashboard');
+    });
+
+    // Shared authenticated APIs (both admins and patients)
+    Route::get('/patients/list', [PatientController::class, 'index']);
+    Route::get('/patient/history', [PatientController::class, 'history']);
+
+});
+
+// lightweight unauthenticated version endpoint — tests and public long-polling may hit this
+Route::get('/patients/version', [PatientController::class, 'version']);

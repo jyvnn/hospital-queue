@@ -50,12 +50,16 @@ class HomeController extends Controller
         })->avg();
 
         // include current queue and recent history so the dashboard can render without JS
+        // Order waiting/in-progress by priority then check-in so the dashboard matches client expectations
+        $orderPriority = "CASE WHEN priority='Urgent' THEN 3 WHEN priority='High' THEN 2 WHEN priority='Regular' THEN 1 ELSE 0 END DESC";
         $waitingPatients = Patient::where('status', 'Waiting')
+            ->orderByRaw($orderPriority)
             ->orderBy('check_in_time', 'asc')
             ->get()
             ->map(function($p) { return array_merge($p->toArray(), ['name' => $p->full_name]); });
 
         $inProgressPatients = Patient::where('status', 'In Progress')
+            ->orderByRaw($orderPriority)
             ->orderBy('check_in_time', 'asc')
             ->get()
             ->map(function($p) { return array_merge($p->toArray(), ['name' => $p->full_name]); });
