@@ -35,7 +35,8 @@ class PatientController extends Controller
             'firstName' => 'required|string|max:100',
             'lastName' => 'required|string|max:100',
             'age' => 'required|integer|min:0|max:150',
-            'contact' => 'required|string|max:50',
+            // require exactly 11 digits for contact number
+            'contact' => 'required|digits:11',
             'email' => 'nullable|email|max:150',
             'gender' => 'required|in:Male,Female,Other',
             'symptoms' => 'required|string|max:2000',
