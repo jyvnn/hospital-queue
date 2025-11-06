@@ -10,7 +10,7 @@ class UserAuthController extends Controller
 {
     public function showLogin()
     {
-        return view('user.login');
+        return view('patient.login');
     }
 
     public function login(Request $request)
@@ -30,7 +30,7 @@ class UserAuthController extends Controller
 
     public function showRegister()
     {
-        return view('user.register');
+        return view('patient.register');
     }
 
     public function register(Request $request)
