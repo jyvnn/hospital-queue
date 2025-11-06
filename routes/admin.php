@@ -45,9 +45,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/patients/assign-doctor', [PatientController::class, 'assignDoctor']);
         Route::post('/patients/complete', [PatientController::class, 'completeConsultation']);
 
-        // Botman / Chat
-        Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
-        Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
     });
 
     // Patient-facing pages (authenticated but not admin)
@@ -61,6 +58,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/patients/list', [PatientController::class, 'index']);
     Route::get('/patient/history', [PatientController::class, 'history']);
 
+    // Botman / Chat
+    Route::get('/chat', [BotManController::class, 'show'])->name('botman.chat');
+    Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
 });
 
 // lightweight unauthenticated version endpoint — tests and public long-polling may hit this
