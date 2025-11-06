@@ -39,16 +39,27 @@
                     var form = document.getElementById('historyFiltersForm');
                     if (!form) return;
                     var timeout = null;
+                    function triggerSubmit(){
+                        // Dispatch submit event and if not prevented, perform native submit
+                        try {
+                            var ev = new Event('submit', { cancelable: true });
+                        } catch (e) {
+                            // older browsers
+                            var ev = document.createEvent('Event'); ev.initEvent('submit', true, true);
+                        }
+                        var notPrevented = form.dispatchEvent(ev);
+                        if (notPrevented) form.submit();
+                    }
                     function submitDebounced(){
                         if(timeout) clearTimeout(timeout);
-                        timeout = setTimeout(function(){ form.submit(); }, 350);
+                        timeout = setTimeout(function(){ triggerSubmit(); }, 350);
                     }
                     var search = document.getElementById('historySearch');
                     if(search){
                         search.addEventListener('input', submitDebounced);
                     }
                     var selects = form.querySelectorAll('select');
-                    selects.forEach(function(s){ s.addEventListener('change', function(){ form.submit(); }); });
+                    selects.forEach(function(s){ s.addEventListener('change', function(){ triggerSubmit(); }); });
                 })();
             </script>
             </form>
@@ -97,7 +108,8 @@
                 <p>Loading patient history...</p>
             </div>
             
-            <!-- History Statistics -->
+            <!-- History Statistics (visible to staff/admin only) -->
+            @if(auth()->check() && auth()->user()->is_admin)
             <div class="stats-grid" style="margin-top: 30px;">
                 <div class="card stat-card">
                     <div class="stat-number" id="totalHistoryPatients">{{ $stats['totalPatientsToday'] ?? 0 }}</div>
@@ -112,6 +124,7 @@
                     <div class="stat-label">Today's Patients</div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </div>
@@ -146,7 +159,14 @@
         function fetchMyHistory(){
             if (!tableBody) return;
             if (loading) loading.classList.remove('hidden');
-            fetch('/patient/history?email={{ urlencode(auth()->user()->email) }}', { headers: { 'Accept':'application/json', 'X-Requested-With':'XMLHttpRequest' }})
+            var params = [];
+            params.push('email={{ urlencode(auth()->user()->email) }}');
+            if (typeof searchInput !== 'undefined' && searchInput && searchInput.value) params.push('search=' + encodeURIComponent(searchInput.value));
+            if (typeof statusSelect !== 'undefined' && statusSelect && statusSelect.value) params.push('status=' + encodeURIComponent(statusSelect.value));
+            if (typeof dateSelect !== 'undefined' && dateSelect && dateSelect.value) params.push('date=' + encodeURIComponent(dateSelect.value));
+            var url = '/patient/history?' + params.join('&');
+
+            fetch(url, { headers: { 'Accept':'application/json', 'X-Requested-With':'XMLHttpRequest' }})
                 .then(function(r){ return r.json(); })
                 .then(function(js){
                     if (!js || !js.success) return;
@@ -160,9 +180,25 @@
                 .finally(function(){ if (loading) loading.classList.add('hidden'); });
         }
 
-        // hide filter form for patients (optional)
+        // wire filter form for patients: use AJAX instead of full-page submit
         var form = document.getElementById('historyFiltersForm');
-        if (form) form.style.display = 'none';
+        var searchInput = document.getElementById('historySearch');
+        var statusSelect = document.getElementById('historyStatus');
+        var dateSelect = document.getElementById('historyDate');
+        var filterTimeout = null;
+
+        function applyFiltersDebounced(){
+            if (filterTimeout) clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(fetchMyHistory, 350);
+        }
+
+        if (form) {
+            // prevent full-page submit; we handle filters via AJAX for patients
+            form.addEventListener('submit', function(e){ e.preventDefault(); fetchMyHistory(); });
+        }
+        if (searchInput) searchInput.addEventListener('input', applyFiltersDebounced);
+        if (statusSelect) statusSelect.addEventListener('change', fetchMyHistory);
+        if (dateSelect) dateSelect.addEventListener('change', fetchMyHistory);
 
         // initial fetch
         fetchMyHistory();
