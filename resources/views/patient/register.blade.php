@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.patient')
 
 @section('title', 'Patient Portal — Register')
 
 @section('content')
-<div class="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
-    <div class="w-100" style="max-width:760px;">
+<div class="min-vh-75 d-flex align-items-start justify-content-center bg-light" style="padding-top:42px;">
+    <div class="w-100" style="max-width:760px; margin-top:0;">
         <div class="text-center mb-4">
             <h1 class="fw-bold">Patient Portal</h1>
             <p class="text-muted">Create an account to access your queue and visit history</p>
@@ -53,60 +53,6 @@
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="text-center mt-4 text-muted small">
-            © {{ date('Y') }} Health Queue Management System. Patient Portal.
-        </div>
-    </div>
-</div>
-@endsection
-@extends('layouts.app')
-
-@section('title','User Register')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="bg-white rounded-4 shadow-sm p-4 card">
-                <h3 class="card-title">Create Patient Account</h3>
-                <p class="card-description">Register to track your queue position and appointment history.</p>
-
-                <form method="POST" action="{{ url('/user/register') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full name</label>
-                        <input id="name" type="text" name="name" value="{{ old('name') }}" required class="form-input">
-                        @error('name') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required class="form-input">
-                        @error('email') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input id="password" type="password" name="password" required class="form-input">
-                        @error('password') <div class="text-danger">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input id="password_confirmation" type="password" name="password_confirmation" required class="form-input">
-                    </div>
-
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary" type="submit">Register</button>
-                    </div>
-                </form>
-
-                <div class="mt-3">
-                    <a href="{{ url('/user/login') }}">Already have an account? Login</a>
-                </div>
             </div>
         </div>
     </div>

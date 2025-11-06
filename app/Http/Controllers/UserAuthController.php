@@ -2,9 +2,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserAuthController extends Controller
 {
@@ -13,24 +13,26 @@ class UserAuthController extends Controller
         return view('patient.login');
     }
 
-    public function login(Request $request)
-    {
-        $data = $request->validate([
-            'email' => ['required','email'],
-            'password' => ['required']
-        ]);
-
-        if (Auth::attempt($data, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/user');
-        }
-
-        return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->onlyInput('email');
-    }
-
     public function showRegister()
     {
         return view('patient.register');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required'],
+        ]);
+
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('user.dashboard'));
+        }
+
+        return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput($request->only('email'));
     }
 
     public function register(Request $request)
@@ -38,7 +40,7 @@ class UserAuthController extends Controller
         $data = $request->validate([
             'name' => ['required','string','max:255'],
             'email' => ['required','email','max:255','unique:users,email'],
-            'password' => ['required','confirmed','min:6']
+            'password' => ['required','confirmed','min:6'],
         ]);
 
         $user = User::create([
@@ -48,7 +50,9 @@ class UserAuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/user');
+        $request->session()->regenerate();
+
+        return redirect()->route('user.dashboard');
     }
 
     public function logout(Request $request)
@@ -56,6 +60,6 @@ class UserAuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/user/login');
+        return redirect()->route('user.login');
     }
 }

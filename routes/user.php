@@ -22,7 +22,7 @@ Route::post('/user/logout', [App\Http\Controllers\UserAuthController::class, 'lo
 
 // Protected user dashboard — requires authentication (patients)
 Route::get('/user', function () {
-	return view('user.dashboard');
+	return view('patient.dashboard');
 })->middleware('auth')->name('user.dashboard');
 
 // Helpful informational endpoint for developers
