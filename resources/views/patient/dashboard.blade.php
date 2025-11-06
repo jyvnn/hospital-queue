@@ -10,10 +10,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
                         <h3 class="card-title">Patient Portal</h3>
-                        <div class="card-description">View the current queue and your visit history. This is a public demo UI (no login required).</div>
-                    </div>
-                    <div>
-                        <small class="text-muted">Status: <span id="refreshStatus">Live (demo)</span></small>
+                        <div class="card-description">View the current queue and your visit history.</div>
                     </div>
                 </div>
 
@@ -25,7 +22,6 @@
 
                     <div id="panelQueue">
                         <h5>Current Queue</h5>
-                        <p class="card-description">People currently waiting to be seen. Positions update in real-time in a production setup; this demo uses static sample data.</p>
 
                         <div class="table-responsive">
                             <table class="table" id="queueTable" aria-describedby="queueDesc">
@@ -51,8 +47,6 @@
 
                     <div id="panelHistory" style="display:none;">
                         <h5>Your Visit History</h5>
-                        <p class="card-description">A short list of previous visits for this demo user (static sample data).</p>
-
                         <div class="table-responsive">
                             <table class="table" id="historyTable">
                                 <thead>
