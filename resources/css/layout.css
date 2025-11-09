@@ -24,3 +24,42 @@
 .mb-4 { margin-bottom: 16px; }
 .mt-4 { margin-top: 16px; }
 .p-4 { padding: 16px; }
+
+/* Animated/styled site background (St. Luke) -----------------------------
+   Drop your image at: public/images/st-lukes.jpg
+   This uses a ::before pseudo-element with a semi-transparent white overlay
+   applied via a linear-gradient so text stays readable. The background
+   animates from clear to a slight blur (3px) so UI letters remain legible.
+*/
+body.bg-animated { background-color: #f3fbfb; }
+
+body.bg-animated::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    /* overlay first, then image so overlay sits above the image */
+    background-image: linear-gradient(rgba(255,255,255,0.54), rgba(255,255,255,0.54)), url('/images/st.lukes.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: 0;
+    /* start unblurred then animate to a small blur for legibility */
+    filter: blur(0px) saturate(1.02);
+    transform: translateZ(0);
+    will-change: filter;
+    animation: bg-blur 5s ease-in-out forwards;
+}
+
+/* make sure page content lives above the background layer */
+nav, header, main, footer, .chat-fab { position: relative; z-index: 1; }
+
+@keyframes bg-blur {
+    from { filter: blur(0px) saturate(1.02); }
+    to   { filter: blur(3px) saturate(0.98); }
+}
+
+/* Optional: uncomment to add a gentle parallax/scale effect
+body.bg-animated::before { animation: bg-blur 5s ease-in-out forwards, bg-scale 12s ease-in-out infinite alternate; }
+@keyframes bg-scale { from { transform: scale(1) } to { transform: scale(1.02) } }
+*/

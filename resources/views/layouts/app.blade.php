@@ -13,8 +13,10 @@
     <!-- Page-specific styles -->
     @stack('styles')
     <style>
-        .navbar-brand { font-weight: bold; }
-        footer { margin-top: 50px; padding: 20px 0; background-color: #f8f9fa; }
+          .navbar-brand { font-weight: bold; }
+          /* Remove full-width footer bar; keep only the words. Make background transparent
+              and reduce padding so the footer text appears without a noticeable band. */
+          footer { margin-top: 30px; padding: 6px 0; background-color: transparent; }
         
         /* consistent page background */
         body { background-color: #f3fbfb; }
@@ -186,7 +188,7 @@
          inline CSS so the critical rules apply immediately and prevent FOUC while dev HMR injects styles. --}}
     @vite(['resources/js/app.js'])
 </head>
-<body>
+<body class="bg-animated">
 
         <!-- Navigation (responsive, based on professor template) -->
         {{--
