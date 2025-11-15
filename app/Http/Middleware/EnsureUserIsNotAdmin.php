@@ -24,7 +24,7 @@ class EnsureUserIsNotAdmin
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['message' => 'Forbidden for admin users.'], 403);
             }
-            return redirect()->route('home');
+            return redirect()->route('admin.home');
         }
 
         return $next($request);

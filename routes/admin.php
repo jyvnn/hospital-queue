@@ -23,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin-only pages and APIs
     Route::middleware([App\Http\Middleware\EnsureUserIsAdmin::class])->group(function () {
-        Route::get('/', [HomeController::class, 'index'])->name('home');
+        Route::get('/', [HomeController::class, 'index'])->name('admin.home');
         Route::get('/registration', [PageController::class, 'registration'])->name('registration');
         Route::get('/doctors', [PageController::class, 'doctors'])->name('doctors');
         Route::get('/history', [PageController::class, 'history'])->name('history');

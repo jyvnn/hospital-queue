@@ -205,7 +205,7 @@
         --}}
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-3">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">Hospital Queue</a>
+            <a class="navbar-brand" href="{{ route('admin.home') }}">Hospital Queue</a>
 
             <!-- Authentication Links (upper-right) -->
             <ul class="navbar-nav ms-auto">
@@ -249,7 +249,7 @@
             @auth
             <div class="d-flex justify-content-center site-tabs">
                 <div class="btn-group" role="group" aria-label="Tabs">
-                    <a href="{{ route('home') }}" class="btn {{ request()->routeIs('home') ? 'btn-primary' : 'btn-outline-secondary' }}">Queue Management</a>
+                    <a href="{{ route('admin.home') }}" class="btn {{ request()->routeIs('admin.home') ? 'btn-primary' : 'btn-outline-secondary' }}">Queue Management</a>
                     <a href="{{ route('registration') }}" class="btn {{ request()->routeIs('registration') ? 'btn-primary' : 'btn-outline-secondary' }}">Patient Registration</a>
                     <a href="{{ route('doctors') }}" class="btn {{ request()->routeIs('doctors') ? 'btn-primary' : 'btn-outline-secondary' }}">Doctors</a>
                     <a href="{{ route('history') }}" class="btn {{ request()->routeIs('history') ? 'btn-primary' : 'btn-outline-secondary' }}">Patient History</a>

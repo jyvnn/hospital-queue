@@ -84,7 +84,7 @@ class PatientController extends Controller
         }
 
         // Redirect to the dashboard (home) so the user sees the queue immediately
-        return redirect()->route('home')->with('success', 'Patient added to queue.')->with('activeTab', 'queue');
+        return redirect()->route('admin.home')->with('success', 'Patient added to queue.')->with('activeTab', 'queue');
     }
 
     public function history(Request $request)
@@ -175,7 +175,7 @@ class PatientController extends Controller
         // bump version and notify listeners on non-AJAX flow too
         try { $version = $this->bumpPatientsVersion(); event(new PatientsUpdated($version)); } catch (\Exception $e) {}
 
-        return redirect()->route('home')->with('success', 'Doctor assigned.')->with('activeTab','queue');
+        return redirect()->route('admin.home')->with('success', 'Doctor assigned.')->with('activeTab','queue');
     }
 
     public function completeConsultation(Request $request)
@@ -206,7 +206,7 @@ class PatientController extends Controller
         // bump version and broadcast
         try { $version = $this->bumpPatientsVersion(); event(new PatientsUpdated($version)); } catch (\Exception $e) {}
 
-        return redirect()->route('home')->with('success', 'Consultation completed.')->with('activeTab','queue');
+        return redirect()->route('admin.home')->with('success', 'Consultation completed.')->with('activeTab','queue');
     }
 
     /**

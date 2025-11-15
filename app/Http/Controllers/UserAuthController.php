@@ -32,7 +32,7 @@ class UserAuthController extends Controller
             $user = Auth::user();
             // If admin credentials used, send to admin dashboard
             if ($user && $user->is_admin) {
-                return redirect()->intended(route('home'));
+                return redirect()->intended(route('admin.home'));
             }
             return redirect()->intended(route('user.dashboard'));
         }
