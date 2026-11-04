@@ -4,7 +4,7 @@
 exec > >(tee -a /var/log/hospital-queue-bootstrap.log) 2>&1
 set -euxo pipefail
 export DEBIAN_FRONTEND=noninteractive
-export COMPOSER_ALLOW_SUPERUSER=1
+export HOME=/root COMPOSER_HOME=/root/.composer COMPOSER_ALLOW_SUPERUSER=1   # cloud-init leaves HOME unset
 
 REPO="https://github.com/johnsiega/hospital-queue-AWS.git"
 BRANCH="aws-deploy"
