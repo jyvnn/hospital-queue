@@ -1,0 +1,78 @@
+﻿### 1. aws sts get-caller-identity (run ON the instance)
+{
+    "UserId": "AROA5GKZ6LZPBGS4TJWZF:i-0217de63e550485b1",
+    "Account": "906963607134",
+    "Arn": "arn:aws:sts::906963607134:assumed-role/hospital-queue-ec2-role/i-0217de63e550485b1"
+}
+### 2. curl -I http://localhost
+HTTP/1.1 302 Found
+Server: nginx/1.24.0 (Ubuntu)
+Content-Type: text/html; charset=utf-8
+### 3. body is the Laravel app, not nginx default
+<title>Hospital Queue Management System</title>
+### 4. php artisan migrate:status
+
+  Migration name .............................................. Batch / Status  
+  0001_01_01_000000_create_users_table ............................... [1] Ran  
+  0001_01_01_000001_create_cache_table ............................... [1] Ran  
+  0001_01_01_000002_create_jobs_table ................................ [1] Ran  
+  2025_10_29_000001_create_doctors_table ............................. [1] Ran  
+  2025_10_29_000002_create_patients_table ............................ [1] Ran  
+  2025_10_29_000003_create_appointments_table ........................ [1] Ran  
+
+### 6. credentials in server .env (must be blank)
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+### deployed commit
+3a4113708b54c1ee350cb5475cb0e934b36f9dd9
+### 8. demo user + 5. user action -> DynamoDB write
+demo user ready
+GET /registration: HTTP 200
+POST /patients/add:
+{"success":true,"id":1,"data":{"first_name":"Demo","last_name":"Patient","age":30,"gender":"Other","contact":"0000","symptoms":"verification","priority":"Urgent","service_type":"General","status":"Waiting","check_in_time":"2026-11-04 12:52:03","id":1
+### aws dynamodb query (CLI read)
+{
+    "Items": [
+        {
+            "event_type": {
+                "S": "patient_checked_in"
+            },
+            "details": {
+                "M": {
+                    "priority": {
+                        "S": "Urgent"
+                    },
+                    "service": {
+                        "S": "General"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "1"
+            },
+            "expires_at": {
+                "N": "1801572723"
+            },
+            "event_id": {
+                "S": "2026-11-04T12:52:03.810054Z#yfmwd1"
+            }
+        }
+    ],
+    "Count": 1,
+    "ScannedCount": 1,
+    "ConsumedCapacity": null
+}
+### php artisan hq:recent-events
++------------------------------------+--------------------+---------+-------------------------------------------+
+| event_id                           | type               | patient | details                                   |
++------------------------------------+--------------------+---------+-------------------------------------------+
+| 2026-11-04T12:52:03.810054Z#yfmwd1 | patient_checked_in | 1       | {"priority":"Urgent","service":"General"} |
++------------------------------------+--------------------+---------+-------------------------------------------+
+### GET /events (public page)
+                <td>2026-11-04T12:52:03.810054Z#yfmwd1</td>
+                <td>patient_checked_in</td>
+                <td>1</td>
+                <td>{&quot;priority&quot;:&quot;Urgent&quot;,&quot;service&quot;:&quot;General&quot;}</td>
