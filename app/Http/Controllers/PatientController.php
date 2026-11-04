@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\Doctor;
+use App\Services\QueueEventLog;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -43,6 +44,10 @@ class PatientController extends Controller
             'service_type'=> $data['serviceType'],
             'status'     => $data['status'] ?? 'Waiting',
             'check_in_time' => $data['checkInTime'] ?? Carbon::now()->toDateTimeString()
+        ]);
+
+        app(QueueEventLog::class)->record('patient_checked_in', $patient->id, [
+            'priority' => $patient->priority, 'service' => $patient->service_type,
         ]);
 
         // If request expects JSON (AJAX) return JSON, otherwise redirect back to registration page
@@ -114,6 +119,10 @@ class PatientController extends Controller
             DB::table('doctors')->where('id',$doctorId)->increment('current_patients');
         }
 
+        if ($ok) {
+            app(QueueEventLog::class)->record('doctor_assigned', $p->id, ['doctor_id' => $doctorId]);
+        }
+
         // If request expects JSON (AJAX) return JSON, otherwise redirect back so server-rendered pages update
         if ($request->wantsJson() || $request->ajax()) {
             $doctorName = null;
@@ -146,6 +155,10 @@ class PatientController extends Controller
             DB::table('doctors')->where('id',$p->assigned_doctor_id)
                 ->where('current_patients','>',0)
                 ->decrement('current_patients');
+        }
+
+        if ($ok) {
+            app(QueueEventLog::class)->record('consultation_completed', $p->id);
         }
 
         // If request expects JSON (AJAX) return JSON, otherwise redirect back so UI shows updated lists
