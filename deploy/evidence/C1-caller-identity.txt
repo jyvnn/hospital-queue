@@ -1,0 +1,19 @@
+# PROVES: The EC2 instance authenticates through its IAM role, not a user.
+# COMMAND: ssh -i "~/.ssh/hospital-queue-key.pem" ubuntu@18.143.166.168 'aws sts get-caller-identity'
+# TIMESTAMP: 2026-11-04T22:09:04+08:00
+# HOST: run on EC2 i-0217de63e550485b1 (ip-172-31-41-215) via SSH from laptop BUDIK
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+## Command as run
+ssh -i "~/.ssh/hospital-queue-key.pem" ubuntu@18.143.166.168 'aws sts get-caller-identity'
+
+## Output (verbatim, exit code 0)
+{
+    "UserId": "AROA5GKZ6LZPBGS4TJWZF:i-0217de63e550485b1",
+    "Account": "906963607134",
+    "Arn": "arn:aws:sts::906963607134:assumed-role/hospital-queue-ec2-role/i-0217de63e550485b1"
+}
+
+## Notes
+Expected shape: Arn begins with arn:aws:sts::<account>:assumed-role/hospital-queue-ec2-role/ (an assumed-role ARN, not a user ARN).
+Failure shape: if Arn began with arn:aws:iam::<account>:user/, the instance would be using user credentials, which violates the deployment policy.

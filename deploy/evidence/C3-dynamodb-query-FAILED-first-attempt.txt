@@ -1,0 +1,22 @@
+# PROVES: A targeted Query by partition key returns the app-written events, newest first.
+# COMMAND: aws dynamodb query --table-name hospital-queue-events --key-condition-expression "queue_date = :d" --expression-attribute-values '{":d":{"S":"2026-11-04"}}' --scan-index-forward false --limit 10 --profile hospital-queue --region ap-southeast-1
+# TIMESTAMP: 2026-11-04T22:09:29+08:00
+# HOST: run on laptop BUDIK (Windows) with AWS CLI profile hospital-queue (account root login; read-only call), region ap-southeast-1
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+## Command as run
+aws dynamodb query --table-name hospital-queue-events --key-condition-expression "queue_date = :d" --expression-attribute-values '{":d":{"S":"2026-11-04"}}' --scan-index-forward false --limit 10 --profile hospital-queue --region ap-southeast-1
+
+## Output (verbatim, exit code 252)
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: [ERROR]: Unknown options: false
+
+## Notes
+Deviation from the task template: the template used 'pk'; the real partition key discovered in the scan is queue_date (value 2026-11-04), so the query uses queue_date. The literal 'pk' query was not run because the table has no such attribute.
+Trace to a click: every patient_checked_in item comes from submitting the patient registration form (POST /patients/add, Registration page). doctor_assigned comes from POST /patients/assign-doctor and consultation_completed from POST /patients/complete. The first item (patient 1, 12:52:03Z) was created by the Phase 5 verification script posting to /patients/add as the demo user, i.e. the same request the Registration form sends.
+
+This run FAILED: the AWS CLI v2 treats --scan-index-forward as a flag with no value (negated as --no-scan-index-forward), so the template's 'false' argument is rejected. This is a command-syntax error in the task template, not an AWS or table problem. The corrected command is saved in C3-dynamodb-query.txt. (Blank lines that PowerShell wraps around stderr were stripped from the output above.)

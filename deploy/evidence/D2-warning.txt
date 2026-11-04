@@ -1,0 +1,18 @@
+﻿# PROVES: the local aws-deploy HEAD is NOT the commit running on EC2
+# COMMAND: git diff --name-only 3a4113708b54c1ee350cb5475cb0e934b36f9dd9 HEAD
+# TIMESTAMP: 2026-11-04T22:12:30+08:00
+# HOST: laptop BUDIK
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+Deployed to EC2 : 3a4113708b54c1ee350cb5475cb0e934b36f9dd9
+Current HEAD    : 5a203ba0d01a2e22b93201e080a1540f9eb85067
+
+Files changed between the two:
+deploy/evidence/README.md
+deploy/evidence/ec2-describe-instance.json
+deploy/evidence/verification-dynamodb-write.txt
+deploy/evidence/verification-output.txt
+
+Non-evidence changes (git diff --stat excluding deploy/evidence): none
+
+Meaning: commits after the deployed one only add or change files under deploy/evidence/ (documentation); git shows no application-code difference between the deployed commit and HEAD. (This compares git commits only; the instance files were not diffed byte-for-byte.)
