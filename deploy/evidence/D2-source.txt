@@ -1,0 +1,16 @@
+# PROVES: which repository, branch and commit the code comes from
+# COMMAND: git remote get-url origin; git branch --show-current; git rev-parse HEAD; git log -1 --format='%H %s (%an, %ci)'
+# TIMESTAMP: 2026-11-04T22:12:30+08:00
+# HOST: laptop BUDIK, repo working copy (scratch clone of the fork)
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+git remote get-url origin   -> https://github.com/johnsiega/hospital-queue-AWS.git
+git branch --show-current   -> aws-deploy
+git rev-parse HEAD          -> 5a203ba0d01a2e22b93201e080a1540f9eb85067
+git log -1 --format='%H %s (%an, %ci)' -> 5a203ba0d01a2e22b93201e080a1540f9eb85067 Add deployment evidence pack (John Cedrick Siega, 2026-11-04 20:53:07 +0800)
+GitHub URL (HTTPS)          -> https://github.com/johnsiega/hospital-queue-AWS
+Branch URL                  -> https://github.com/johnsiega/hospital-queue-AWS/tree/aws-deploy
+Commit actually deployed to EC2 (/var/log/hospital-queue-deployed-sha.txt, read over SSH) -> 3a4113708b54c1ee350cb5475cb0e934b36f9dd9
+
+Note: This is the branch and commit currently deployed to EC2. Any divergence should be verified with git diff against the running instance.
+Divergence check: HEAD (5a203ba0d01a2e22b93201e080a1540f9eb85067) differs from the deployed commit (3a4113708b54c1ee350cb5475cb0e934b36f9dd9); see D2-warning.txt.

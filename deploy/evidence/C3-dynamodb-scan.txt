@@ -1,0 +1,144 @@
+# PROVES: The DynamoDB table holds real items written by the running app.
+# COMMAND: aws dynamodb scan --table-name hospital-queue-events --max-items 5 --profile hospital-queue --region ap-southeast-1
+# TIMESTAMP: 2026-11-04T22:09:19+08:00
+# HOST: run on laptop BUDIK (Windows) with AWS CLI profile hospital-queue (account root login; read-only call), region ap-southeast-1
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+## Command as run
+aws dynamodb scan --table-name hospital-queue-events --max-items 5 --profile hospital-queue --region ap-southeast-1
+
+## Output (verbatim, exit code 0)
+{
+    "Items": [
+        {
+            "event_type": {
+                "S": "patient_checked_in"
+            },
+            "details": {
+                "M": {
+                    "priority": {
+                        "S": "Urgent"
+                    },
+                    "service": {
+                        "S": "General"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "1"
+            },
+            "expires_at": {
+                "N": "1801572723"
+            },
+            "event_id": {
+                "S": "2026-11-04T12:52:03.810054Z#yfmwd1"
+            }
+        },
+        {
+            "event_type": {
+                "S": "patient_checked_in"
+            },
+            "details": {
+                "M": {
+                    "priority": {
+                        "S": "Regular"
+                    },
+                    "service": {
+                        "S": "Consultation"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "2"
+            },
+            "expires_at": {
+                "N": "1801574202"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:16:42.833477Z#mi9vwi"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "2"
+            },
+            "expires_at": {
+                "N": "1801574227"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:17:07.810432Z#7y85jh"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801574228"
+            },
+            "patient_id": {
+                "N": "2"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:17:08.039874Z#p2q95z"
+            }
+        },
+        {
+            "event_type": {
+                "S": "consultation_completed"
+            },
+            "details": {
+                "L": []
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801574238"
+            },
+            "patient_id": {
+                "N": "2"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:17:18.217871Z#qitswz"
+            }
+        }
+    ],
+    "Count": 16,
+    "ScannedCount": 16,
+    "ConsumedCapacity": null,
+    "NextToken": "eyJFeGNsdXNpdmVTdGFydEtleSI6IG51bGwsICJib3RvX3RydW5jYXRlX2Ftb3VudCI6IDV9"
+}
+
+## Notes
+Run from the laptop, not the instance: the instance role is deliberately limited to PutItem and Query, so Scan from the instance would be AccessDenied (least privilege working as designed).
+The table's key schema is queue_date (HASH) + event_id (RANGE); there is no attribute named pk.

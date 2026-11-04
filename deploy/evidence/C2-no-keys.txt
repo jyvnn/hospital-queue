@@ -1,0 +1,16 @@
+# PROVES: No long-lived AWS credentials are stored in the server .env.
+# COMMAND: ssh -i "~/.ssh/hospital-queue-key.pem" ubuntu@18.143.166.168 "grep -iE 'aws_access_key_id|aws_secret_access_key' /var/www/hospital-queue/.env"
+# TIMESTAMP: 2026-11-04T22:09:07+08:00
+# HOST: run on EC2 i-0217de63e550485b1 (ip-172-31-41-215) via SSH from laptop BUDIK
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+## Command as run
+ssh -i "~/.ssh/hospital-queue-key.pem" ubuntu@18.143.166.168 "grep -iE 'aws_access_key_id|aws_secret_access_key' /var/www/hospital-queue/.env"
+
+## Output (verbatim, exit code 0)
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+
+## Notes
+App root confirmed from deploy/bootstrap.sh and verification-output.txt: /var/www/hospital-queue.
+Absence of AWS credentials in the server .env confirms the application obtains credentials solely from the EC2 instance profile.

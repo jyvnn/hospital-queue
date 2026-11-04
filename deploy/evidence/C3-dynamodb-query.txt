@@ -1,0 +1,258 @@
+# PROVES: A targeted Query by partition key returns the app-written events, newest first.
+# COMMAND: aws dynamodb query --table-name hospital-queue-events --key-condition-expression "queue_date = :d" --expression-attribute-values '{":d":{"S":"2026-11-04"}}' --no-scan-index-forward --limit 10 --profile hospital-queue --region ap-southeast-1
+# TIMESTAMP: 2026-11-04T22:09:46+08:00
+# HOST: run on laptop BUDIK (Windows) with AWS CLI profile hospital-queue (account root login; read-only call), region ap-southeast-1
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+## Command as run
+aws dynamodb query --table-name hospital-queue-events --key-condition-expression "queue_date = :d" --expression-attribute-values '{":d":{"S":"2026-11-04"}}' --no-scan-index-forward --limit 10 --profile hospital-queue --region ap-southeast-1
+
+## Output (verbatim, exit code 0)
+{
+    "Items": [
+        {
+            "event_type": {
+                "S": "consultation_completed"
+            },
+            "details": {
+                "L": []
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801575619"
+            },
+            "patient_id": {
+                "N": "4"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:40:19.443035Z#uafx66"
+            }
+        },
+        {
+            "event_type": {
+                "S": "consultation_completed"
+            },
+            "details": {
+                "L": []
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801575619"
+            },
+            "patient_id": {
+                "N": "4"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:40:19.240067Z#ejkqpc"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "4"
+            },
+            "expires_at": {
+                "N": "1801575617"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:40:17.702958Z#najv7s"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "4"
+            },
+            "expires_at": {
+                "N": "1801575617"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:40:17.500322Z#h82umv"
+            }
+        },
+        {
+            "event_type": {
+                "S": "patient_checked_in"
+            },
+            "details": {
+                "M": {
+                    "priority": {
+                        "S": "Regular"
+                    },
+                    "service": {
+                        "S": "Consultation"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "4"
+            },
+            "expires_at": {
+                "N": "1801575606"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:40:06.022797Z#ciudjs"
+            }
+        },
+        {
+            "event_type": {
+                "S": "consultation_completed"
+            },
+            "details": {
+                "L": []
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "3"
+            },
+            "expires_at": {
+                "N": "1801575475"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:37:55.492365Z#odtvj4"
+            }
+        },
+        {
+            "event_type": {
+                "S": "consultation_completed"
+            },
+            "details": {
+                "L": []
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801575475"
+            },
+            "patient_id": {
+                "N": "3"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:37:55.205735Z#risozy"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801575467"
+            },
+            "patient_id": {
+                "N": "3"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:37:47.138439Z#y9tiwr"
+            }
+        },
+        {
+            "event_type": {
+                "S": "doctor_assigned"
+            },
+            "details": {
+                "M": {
+                    "doctor_id": {
+                        "S": "1"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "patient_id": {
+                "N": "3"
+            },
+            "expires_at": {
+                "N": "1801575466"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:37:46.952724Z#i2nvyy"
+            }
+        },
+        {
+            "event_type": {
+                "S": "patient_checked_in"
+            },
+            "details": {
+                "M": {
+                    "priority": {
+                        "S": "Regular"
+                    },
+                    "service": {
+                        "S": "Consultation"
+                    }
+                }
+            },
+            "queue_date": {
+                "S": "2026-11-04"
+            },
+            "expires_at": {
+                "N": "1801575458"
+            },
+            "patient_id": {
+                "N": "3"
+            },
+            "event_id": {
+                "S": "2026-11-04T13:37:38.784495Z#fjqood"
+            }
+        }
+    ],
+    "Count": 10,
+    "ScannedCount": 10,
+    "LastEvaluatedKey": {
+        "event_id": {
+            "S": "2026-11-04T13:37:38.784495Z#fjqood"
+        },
+        "queue_date": {
+            "S": "2026-11-04"
+        }
+    }
+}
+
+## Notes
+Two deviations from the task template, both documented: (1) the template used 'pk'; the real partition key found in the scan is queue_date, so the query uses queue_date = 2026-11-04 (the literal 'pk' query was not run: the table has no such attribute). (2) the template's '--scan-index-forward false' is rejected by AWS CLI v2 (see C3-dynamodb-query-FAILED-first-attempt.txt); the v2 form for descending order is --no-scan-index-forward.
+Trace to a click: patient_checked_in items come from submitting the registration form (POST /patients/add). doctor_assigned comes from POST /patients/assign-doctor and consultation_completed from POST /patients/complete. The oldest item (patient 1, 12:52:03Z) was created by the Phase 5 verification script posting to /patients/add as the demo user, i.e. the same request the Registration form sends.

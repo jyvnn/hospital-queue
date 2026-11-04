@@ -1,0 +1,24 @@
+# PROVES: how to finish/edit the architecture diagram in draw.io
+# COMMAND: (none - instructions)
+# TIMESTAMP: 2026-11-04
+# HOST: n/a
+# OPERATOR: Claude Code (AI agent) on behalf of John Cedrick Siega
+
+Files: D1-architecture.mmd (Mermaid source) and D1-architecture.png (rendered, 1600px size option).
+No Visio or finished draw.io file was produced.
+
+To edit:
+1. Open https://mermaid.live , paste the contents of D1-architecture.mmd, check the preview.
+2. Export SVG (or PNG).
+3. In draw.io (app.diagrams.net): File > Import from > Device, choose the SVG; or Arrange > Insert > Advanced > Mermaid and paste the source.
+4. Re-style with AWS icons if the docx wants them (EC2, IAM, DynamoDB, Internet Gateway, VPC, security group).
+
+Double-check against the running system before submitting:
+- Region ap-southeast-1; account 906963607134 (shown in the diagram title - remove if the team wants it redacted).
+- Default VPC vpc-05bf3c0d21174ca5d; Internet Gateway is the default VPC's.
+- Security group hospital-queue-sg (sg-0946176d660094291): 80/tcp from 0.0.0.0/0; 22/tcp from 103.254.214.140/30 (NOT a single IP; see README known gaps).
+- EC2 i-0217de63e550485b1, t3.micro, ami-0403d346e3210afd6, nginx + PHP-FPM 8.3 + Laravel 12 + local MariaDB.
+- IAM role hospital-queue-ec2-role, instance profile hospital-queue-ec2-profile, actions dynamodb:PutItem and dynamodb:Query only.
+- DynamoDB table hospital-queue-events (PK queue_date, SK event_id, on-demand, TTL expires_at).
+- There is NO table named hospital-queue-runtime. The task text mentioned one; it does not exist, so it is not drawn. Add it only if one is really created.
+- DynamoDB is reached over its public regional endpoint through the Internet Gateway; no VPC gateway endpoint was created. The diagram shows it outside the VPC.

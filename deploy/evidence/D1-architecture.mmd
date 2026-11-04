@@ -1,0 +1,28 @@
+%% Hospital Queue on AWS - architecture (ap-southeast-1)
+%% Reflects what is actually deployed: ONE DynamoDB table (hospital-queue-events); patient data is in local MariaDB.
+flowchart LR
+    user["End user browser"]
+
+    subgraph AWS["AWS account 906963607134 - region ap-southeast-1"]
+        subgraph VPC["Default VPC vpc-05bf3c0d21174ca5d"]
+            igw["Internet Gateway"]
+            subgraph SG["Security group hospital-queue-sg<br/>80/tcp from 0.0.0.0/0<br/>22/tcp from 103.254.214.140/30 (admin egress range, 4 IPs)"]
+                ec2["EC2 t3.micro i-0217de63e550485b1<br/>nginx + PHP-FPM 8.3 + Laravel 12<br/>local MariaDB (patients, doctors, users)"]
+            end
+        end
+        role["IAM role hospital-queue-ec2-role<br/>dynamodb:PutItem + dynamodb:Query<br/>on hospital-queue-events only<br/>(via instance profile hospital-queue-ec2-profile)"]
+        subgraph DDB["Amazon DynamoDB regional endpoint (outside the VPC)"]
+            events[("hospital-queue-events<br/>PK queue_date, SK event_id<br/>on-demand, TTL expires_at")]
+        end
+    end
+
+    user -->|"HTTP :80"| igw
+    igw -->|"allowed by SG"| ec2
+    ec2 -->|"PutItem on check-in / assign / complete<br/>Query for /events"| events
+    role -.->|"assumes role at boot (temporary credentials)"| ec2
+
+    subgraph LEGEND["Legend"]
+        direction LR
+        l1["solid arrow = request / data flow"]
+        l2["dashed arrow = access control (IAM)"]
+    end
