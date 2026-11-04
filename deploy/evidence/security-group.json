@@ -51,7 +51,7 @@
                     "UserIdGroupPairs": [],
                     "IpRanges": [
                         {
-                            "CidrIp": "103.254.214.142/32"
+                            "CidrIp": "103.254.214.140/30"
                         }
                     ],
                     "Ipv6Ranges": [],

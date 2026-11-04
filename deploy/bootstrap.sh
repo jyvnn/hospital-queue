@@ -22,7 +22,7 @@ fi
 apt-get update -y
 apt-get install -y nginx git unzip curl composer \
   php8.3-fpm php8.3-cli php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip \
-  php8.3-sqlite3 php8.3-bcmath php8.3-intl
+  php8.3-mysql php8.3-sqlite3 php8.3-bcmath php8.3-intl mariadb-server
 
 # 3. Fetch the aws-deploy branch (public/build is committed, so no Node/Vite here).
 rm -rf "$WEBROOT"
@@ -43,7 +43,16 @@ setenv APP_ENV production
 setenv APP_DEBUG false
 setenv APP_URL "http://$PUBLIC_IP"
 setenv LOG_LEVEL warning
-setenv DB_CONNECTION sqlite
+# The app uses MySQL-only SQL (TIMESTAMPDIFF), so it runs on local MariaDB, not SQLite.
+systemctl enable --now mariadb
+DB_PASS=$(openssl rand -hex 16)
+mysql -e "CREATE DATABASE IF NOT EXISTS hospital_queue CHARACTER SET utf8mb4; CREATE USER IF NOT EXISTS 'hq'@'localhost' IDENTIFIED BY '$DB_PASS'; ALTER USER 'hq'@'localhost' IDENTIFIED BY '$DB_PASS'; GRANT ALL ON hospital_queue.* TO 'hq'@'localhost';"
+setenv DB_CONNECTION mysql
+setenv DB_HOST 127.0.0.1
+setenv DB_PORT 3306
+setenv DB_DATABASE hospital_queue
+setenv DB_USERNAME hq
+setenv DB_PASSWORD "$DB_PASS"
 setenv SESSION_DRIVER database
 setenv CACHE_STORE database
 setenv QUEUE_CONNECTION sync
@@ -52,7 +61,6 @@ setenv AWS_SECRET_ACCESS_KEY ''
 setenv AWS_DEFAULT_REGION "$REGION"
 setenv DYNAMODB_EVENTS_TABLE "$EVENTS_TABLE"
 
-mkdir -p database && touch database/database.sqlite
 php artisan key:generate --force
 php artisan migrate --force
 php artisan db:seed --class=DoctorSeeder --force   # doctors only; no default user/password
