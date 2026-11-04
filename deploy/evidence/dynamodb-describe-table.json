@@ -1,0 +1,46 @@
+﻿{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "event_id",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "queue_date",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "hospital-queue-events",
+        "KeySchema": [
+            {
+                "AttributeName": "queue_date",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "event_id",
+                "KeyType": "RANGE"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2026-11-04T20:17:04.353000+08:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 0,
+            "WriteCapacityUnits": 0
+        },
+        "TableSizeBytes": 0,
+        "ItemCount": 0,
+        "TableArn": "arn:aws:dynamodb:ap-southeast-1:906963607134:table/hospital-queue-events",
+        "TableId": "da331a54-e6db-4459-b886-d8aadd2043c6",
+        "BillingModeSummary": {
+            "BillingMode": "PAY_PER_REQUEST",
+            "LastUpdateToPayPerRequestDateTime": "2026-11-04T20:17:04.353000+08:00"
+        },
+        "DeletionProtectionEnabled": false,
+        "WarmThroughput": {
+            "ReadUnitsPerSecond": 12000,
+            "WriteUnitsPerSecond": 4000,
+            "Status": "ACTIVE"
+        }
+    }
+}

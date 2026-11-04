@@ -1,0 +1,173 @@
+﻿{
+    "Reservations": [
+        {
+            "ReservationId": "r-0b75679f0a7bdb82b",
+            "OwnerId": "906963607134",
+            "Groups": [],
+            "Instances": [
+                {
+                    "Architecture": "x86_64",
+                    "BlockDeviceMappings": [
+                        {
+                            "DeviceName": "/dev/sda1",
+                            "Ebs": {
+                                "AttachTime": "2026-11-04T12:49:24+00:00",
+                                "DeleteOnTermination": true,
+                                "Status": "attached",
+                                "VolumeId": "vol-038180dd4adb20ee8",
+                                "EbsCardIndex": 0
+                            }
+                        }
+                    ],
+                    "ClientToken": "29a9626a-7b0f-4b2e-a546-fbad1ef7c757",
+                    "EbsOptimized": false,
+                    "EnaSupport": true,
+                    "Hypervisor": "xen",
+                    "IamInstanceProfile": {
+                        "Arn": "arn:aws:iam::906963607134:instance-profile/hospital-queue-ec2-profile",
+                        "Id": "AIPA5GKZ6LZPEIL4OFTAS"
+                    },
+                    "NetworkInterfaces": [
+                        {
+                            "Association": {
+                                "IpOwnerId": "amazon",
+                                "PublicDnsName": "ec2-18-143-166-168.ap-southeast-1.compute.amazonaws.com",
+                                "PublicIp": "18.143.166.168"
+                            },
+                            "Attachment": {
+                                "AttachTime": "2026-11-04T12:49:24+00:00",
+                                "AttachmentId": "eni-attach-04cc6af2d78e540e9",
+                                "DeleteOnTermination": true,
+                                "DeviceIndex": 0,
+                                "Status": "attached",
+                                "NetworkCardIndex": 0
+                            },
+                            "Description": "",
+                            "Groups": [
+                                {
+                                    "GroupId": "sg-0946176d660094291",
+                                    "GroupName": "hospital-queue-sg"
+                                }
+                            ],
+                            "Ipv6Addresses": [],
+                            "MacAddress": "06:ff:f8:95:c9:f7",
+                            "NetworkInterfaceId": "eni-01fef6158042dad0e",
+                            "OwnerId": "906963607134",
+                            "PrivateDnsName": "ip-172-31-41-215.ap-southeast-1.compute.internal",
+                            "PrivateIpAddress": "172.31.41.215",
+                            "PrivateIpAddresses": [
+                                {
+                                    "Association": {
+                                        "IpOwnerId": "amazon",
+                                        "PublicDnsName": "ec2-18-143-166-168.ap-southeast-1.compute.amazonaws.com",
+                                        "PublicIp": "18.143.166.168"
+                                    },
+                                    "Primary": true,
+                                    "PrivateDnsName": "ip-172-31-41-215.ap-southeast-1.compute.internal",
+                                    "PrivateIpAddress": "172.31.41.215"
+                                }
+                            ],
+                            "SourceDestCheck": true,
+                            "Status": "in-use",
+                            "SubnetId": "subnet-0f0a5f4cd28a6d4b7",
+                            "VpcId": "vpc-05bf3c0d21174ca5d",
+                            "InterfaceType": "interface",
+                            "Operator": {
+                                "Managed": false
+                            }
+                        }
+                    ],
+                    "RootDeviceName": "/dev/sda1",
+                    "RootDeviceType": "ebs",
+                    "SecurityGroups": [
+                        {
+                            "GroupId": "sg-0946176d660094291",
+                            "GroupName": "hospital-queue-sg"
+                        }
+                    ],
+                    "SourceDestCheck": true,
+                    "Tags": [
+                        {
+                            "Key": "Project",
+                            "Value": "hospital-queue"
+                        },
+                        {
+                            "Key": "Name",
+                            "Value": "hospital-queue-app"
+                        }
+                    ],
+                    "VirtualizationType": "hvm",
+                    "CpuOptions": {
+                        "CoreCount": 1,
+                        "ThreadsPerCore": 2
+                    },
+                    "CapacityReservationSpecification": {
+                        "CapacityReservationPreference": "open"
+                    },
+                    "HibernationOptions": {
+                        "Configured": false
+                    },
+                    "MetadataOptions": {
+                        "State": "applied",
+                        "HttpTokens": "required",
+                        "HttpPutResponseHopLimit": 2,
+                        "HttpEndpoint": "enabled",
+                        "HttpProtocolIpv6": "disabled",
+                        "InstanceMetadataTags": "disabled"
+                    },
+                    "EnclaveOptions": {
+                        "Enabled": false
+                    },
+                    "BootMode": "uefi-preferred",
+                    "PlatformDetails": "Linux/UNIX",
+                    "UsageOperation": "RunInstances",
+                    "UsageOperationUpdateTime": "2026-11-04T12:49:24+00:00",
+                    "PrivateDnsNameOptions": {
+                        "HostnameType": "ip-name",
+                        "EnableResourceNameDnsARecord": false,
+                        "EnableResourceNameDnsAAAARecord": false
+                    },
+                    "MaintenanceOptions": {
+                        "AutoRecovery": "default",
+                        "RebootMigration": "default"
+                    },
+                    "CurrentInstanceBootMode": "uefi",
+                    "NetworkPerformanceOptions": {
+                        "BandwidthWeighting": "default"
+                    },
+                    "Operator": {
+                        "Managed": false,
+                        "HiddenByDefault": false
+                    },
+                    "InstanceId": "i-0217de63e550485b1",
+                    "ImageId": "ami-0403d346e3210afd6",
+                    "State": {
+                        "Code": 16,
+                        "Name": "running"
+                    },
+                    "PrivateDnsName": "ip-172-31-41-215.ap-southeast-1.compute.internal",
+                    "PublicDnsName": "ec2-18-143-166-168.ap-southeast-1.compute.amazonaws.com",
+                    "StateTransitionReason": "",
+                    "KeyName": "hospital-queue-key",
+                    "AmiLaunchIndex": 0,
+                    "ProductCodes": [],
+                    "InstanceType": "t3.micro",
+                    "LaunchTime": "2026-11-04T12:49:24+00:00",
+                    "Placement": {
+                        "AvailabilityZoneId": "apse1-az2",
+                        "GroupName": "",
+                        "Tenancy": "default",
+                        "AvailabilityZone": "ap-southeast-1a"
+                    },
+                    "Monitoring": {
+                        "State": "disabled"
+                    },
+                    "SubnetId": "subnet-0f0a5f4cd28a6d4b7",
+                    "VpcId": "vpc-05bf3c0d21174ca5d",
+                    "PrivateIpAddress": "172.31.41.215",
+                    "PublicIpAddress": "18.143.166.168"
+                }
+            ]
+        }
+    ]
+}

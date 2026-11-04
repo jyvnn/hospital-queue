@@ -1,0 +1,63 @@
+﻿{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-0946176d660094291",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "hospital-queue-sg"
+                },
+                {
+                    "Key": "Project",
+                    "Value": "hospital-queue"
+                }
+            ],
+            "VpcId": "vpc-05bf3c0d21174ca5d",
+            "SecurityGroupArn": "arn:aws:ec2:ap-southeast-1:906963607134:security-group/sg-0946176d660094291",
+            "OwnerId": "906963607134",
+            "GroupName": "hospital-queue-sg",
+            "Description": "Hospital queue app: SSH from admin IP, HTTP public",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 80,
+                    "ToPort": 80,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                },
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 22,
+                    "ToPort": 22,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "103.254.214.140/30"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        }
+    ]
+}

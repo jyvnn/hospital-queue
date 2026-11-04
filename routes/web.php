@@ -52,6 +52,15 @@ Route::middleware('auth')->group(function () {
 	Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle'])->name('botman.handle');
 });
 
+// Live view of the DynamoDB queue event log (no patient names are stored)
+Route::get('/events', function (\App\Services\QueueEventLog $log) {
+	try {
+		return view('events', ['events' => $log->recent(25), 'error' => null]);
+	} catch (\Throwable $e) {
+		return view('events', ['events' => [], 'error' => $e->getMessage()]);
+	}
+})->name('events');
+
 // Public user-facing dashboard (no auth required) — static UI for queue & history
 Route::get('/user', function () {
 	return view('user.dashboard');

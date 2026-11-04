@@ -1,0 +1,16 @@
+﻿registration page: HTTP 500
+csrf len 0
+{
+    "message": "CSRF token mismatch."
+}
+### aws dynamodb query (CLI read, run on instance)
+{
+    "Items": [],
+    "Count": 0,
+    "ScannedCount": 0,
+    "ConsumedCapacity": null
+}
+### php artisan hq:recent-events
++----------+------+---------+---------+
+| event_id | type | patient | details |
++----------+------+---------+---------+

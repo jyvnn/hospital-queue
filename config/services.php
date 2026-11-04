@@ -28,6 +28,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'dynamodb' => [
+        'region' => env('AWS_DEFAULT_REGION', 'ap-southeast-1'),
+        'events_table' => env('DYNAMODB_EVENTS_TABLE'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

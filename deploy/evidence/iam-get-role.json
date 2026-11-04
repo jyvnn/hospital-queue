@@ -1,0 +1,29 @@
+﻿{
+    "Role": {
+        "Path": "/",
+        "RoleName": "hospital-queue-ec2-role",
+        "RoleId": "AROA5GKZ6LZPBGS4TJWZF",
+        "Arn": "arn:aws:iam::906963607134:role/hospital-queue-ec2-role",
+        "CreateDate": "2026-11-04T12:17:39+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "Tags": [
+            {
+                "Key": "Project",
+                "Value": "hospital-queue"
+            }
+        ],
+        "RoleLastUsed": {}
+    }
+}

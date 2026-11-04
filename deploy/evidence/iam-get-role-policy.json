@@ -1,0 +1,18 @@
+﻿{
+    "RoleName": "hospital-queue-ec2-role",
+    "PolicyName": "hospital-queue-dynamodb",
+    "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "QueueEventsReadWrite",
+                "Effect": "Allow",
+                "Action": [
+                    "dynamodb:PutItem",
+                    "dynamodb:Query"
+                ],
+                "Resource": "arn:aws:dynamodb:ap-southeast-1:906963607134:table/hospital-queue-events"
+            }
+        ]
+    }
+}

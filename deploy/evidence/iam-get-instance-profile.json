@@ -1,0 +1,31 @@
+﻿{
+    "InstanceProfile": {
+        "Path": "/",
+        "InstanceProfileName": "hospital-queue-ec2-profile",
+        "InstanceProfileId": "AIPA5GKZ6LZPEIL4OFTAS",
+        "Arn": "arn:aws:iam::906963607134:instance-profile/hospital-queue-ec2-profile",
+        "CreateDate": "2026-11-04T12:17:43+00:00",
+        "Roles": [
+            {
+                "Path": "/",
+                "RoleName": "hospital-queue-ec2-role",
+                "RoleId": "AROA5GKZ6LZPBGS4TJWZF",
+                "Arn": "arn:aws:iam::906963607134:role/hospital-queue-ec2-role",
+                "CreateDate": "2026-11-04T12:17:39+00:00",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                }
+            }
+        ],
+        "Tags": []
+    }
+}
